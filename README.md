@@ -73,6 +73,13 @@ pip install -r requirements.txt
 ```bash
 uvicorn main:app
 ```
+## With Docker
+
+Install Docker on your local PC, or use a Docker runtime in your production environment
+
+```bash
+docker build -t fastapi-app . && docker run -p 80:80 fastapi-app
+```
 
 2. Access the API documentation:
 
