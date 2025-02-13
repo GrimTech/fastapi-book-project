@@ -1,16 +1,14 @@
-name: CI Pipeline  # Name of the workflow (visible in GitHub Actions)
+name: Deploy to Render
 on:
-  pull_request:    # Trigger when a pull request is created
-    branches: [main]  # Only for PRs targeting the 'main' branch
+  push:
+    branches: [main]
 jobs:
-  test:            # Job name (you can rename this)
-    runs-on: ubuntu-latest  # GitHub-hosted runner (Ubuntu OS)
+  deploy:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4  # Checkout your code to the runner
-      - uses: actions/setup-python@v4  # Install Python
-        with:
-          python-version: '3.11.0'  # Replace with your Python version (e.g., 3.10)
-      - name: Install Dependencies  # Step name (arbitrary)
-        run: pip install -r requirements.txt  # Install project dependencies
-      - name: Run Tests
-        run: pytest  # Run pytest to execute your tests
+      - name: Trigger Render Deploy
+        run: |
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -d '{"commitSha": "${{ github.sha }}"}' \
+            "${{ secrets.RENDER_DEPLOY_HOOK }}"
